@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2010 Google Inc. All Rights Reserved.
 #
@@ -20,12 +20,9 @@
 
 import os
 import pickle
-import StringIO
-
-
-
-import unittest as test
 import fingerprint
+import unittest as test
+from io import BytesIO
 
 
 class FingerprinterTest(test.TestCase):
@@ -37,34 +34,34 @@ class FingerprinterTest(test.TestCase):
     files = os.listdir(data_dir)
     for fnam in files:
       if not fnam.lower().endswith(".res"):
-        with file(os.path.join(data_dir, fnam), "rb") as objf:
+        with open(os.path.join(data_dir, fnam), "rb") as objf:
           fp = fingerprint.Fingerprinter(objf)
           fp.EvalGeneric()
           fp.EvalPecoff()
           results = fp.HashIt()
-          with file(os.path.join(data_dir, fnam + ".res"), "rb") as resf:
+          with open(os.path.join(data_dir, fnam + ".res"), "rb") as resf:
             exp_results = pickle.load(resf)
             diff = (exp_results != results)
             if diff:
-              print
-              print fingerprint.FormatResults(resf, exp_results) # NADAV: exp has sha.512
-              print fingerprint.FormatResults(objf, results)
+              print()
+              print(fingerprint.FormatResults(resf, exp_results))
+              print(fingerprint.FormatResults(objf, results))
               self.fail()
 
   def testReasonableInterval(self):
     # Check if the limit on maximum blocksize for processing still holds.
-    dummy = StringIO.StringIO("")
+    dummy = BytesIO()
     fp = fingerprint.Fingerprinter(dummy)
     big_finger = fingerprint.Finger(None,
                                     [fingerprint.Range(0, 1000001)],
                                     None)
     fp.fingers.append(big_finger)
     start, stop = fp._GetNextInterval()
-    self.assertEquals(0, start)
-    self.assertEquals(1000000, stop)
+    self.assertEqual(0, start)
+    self.assertEqual(1000000, stop)
 
   def testAdjustments(self):
-    dummy = StringIO.StringIO("")
+    dummy = BytesIO()
     fp = fingerprint.Fingerprinter(dummy)
     big_finger = fingerprint.Finger(None,
                                     [fingerprint.Range(10, 20)],
@@ -73,31 +70,31 @@ class FingerprinterTest(test.TestCase):
 
     # The remaining range should not yet be touched...
     fp._AdjustIntervals(9, 10)
-    self.assertEquals([fingerprint.Range(10, 20)], fp.fingers[0].ranges)
+    self.assertEqual([fingerprint.Range(10, 20)], fp.fingers[0].ranges)
     # Trying to consume into the range. Blow up.
     self.assertRaises(RuntimeError, fp._AdjustIntervals, 9, 11)
     # We forgot a byte. Blow up.
     self.assertRaises(RuntimeError, fp._AdjustIntervals, 11, 12)
     # Consume a byte
     fp._AdjustIntervals(10, 11)
-    self.assertEquals([fingerprint.Range(11, 20)], fp.fingers[0].ranges)
+    self.assertEqual([fingerprint.Range(11, 20)], fp.fingers[0].ranges)
     # Consumed too much. Blow up.
     self.assertRaises(RuntimeError, fp._AdjustIntervals, 11, 21)
     # Consume exactly.
     fp._AdjustIntervals(11, 20)
-    self.assertEquals(0, len(fp.fingers[0].ranges))
+    self.assertEqual(0, len(fp.fingers[0].ranges))
 
   class MockHasher(object):
     def __init__(self):
-      self.seen = ""
+      self.seen = b''
 
     def update(self, content):
       self.seen += content
 
   def testHashBlock(self):
     # Does it invoke a hash function?
-    dummy = "12345"
-    fp = fingerprint.Fingerprinter(StringIO.StringIO(dummy))
+    dummy = b'12345'
+    fp = fingerprint.Fingerprinter(BytesIO(dummy))
     big_finger = fingerprint.Finger(None,
                                     [fingerprint.Range(0, len(dummy))],
                                     None)
@@ -106,7 +103,7 @@ class FingerprinterTest(test.TestCase):
     fp.fingers.append(big_finger)
     # Let's process the block
     fp._HashBlock(dummy, 0, len(dummy))
-    self.assertEquals(hasher.seen, dummy)
+    self.assertEqual(hasher.seen, dummy)
 
   # TODO(user): Add more tests for the carry-over of HashIt,
   # the pecoff parsing pieces, and the parser / collector of the SignedData

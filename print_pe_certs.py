@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2011 Google Inc. All Rights Reserved.
 #
@@ -52,7 +52,7 @@ del F, univ
 def main():
   data_file = sys.argv[1]
 
-  with file(data_file, 'rb') as objf:
+  with open(data_file, 'rb') as objf:
     fingerprinter = fingerprint.Fingerprinter(objf)
     is_pecoff = fingerprinter.EvalPecoff()
     fingerprinter.EvalGeneric()
@@ -65,7 +65,7 @@ def main():
   for hname in sorted(hashes[0].keys()):
     if hname != 'name':
       print('%s: %s' % (hname, hashes[0][hname].encode('hex')))
-  print
+  print()
 
   if not is_pecoff:
     print('This is not a PE/COFF binary. Exiting.')
@@ -78,7 +78,7 @@ def main():
   for hname in sorted(hashes[0].keys()):
     if hname != 'name' and hname != 'SignedData':
       print('%s: %s' % (hname, hashes[0][hname].encode('hex')))
-  print
+  print()
 
   signed_pecoffs = [x for x in results if x['name'] == 'pecoff' and
                     'SignedData' in x]
@@ -121,7 +121,7 @@ def main():
 
   print('Binary is signed with cert issued by:')
   pprint.pprint(auth.signing_cert_id)
-  print
+  print()
 
   print('Cert chain head issued by:')
   pprint.pprint(auth.cert_chain_head[2])
@@ -129,7 +129,7 @@ def main():
         (time.asctime(time.gmtime(auth.cert_chain_head[0]))))
   print('  Chain not after: %s UTC' %
         (time.asctime(time.gmtime(auth.cert_chain_head[1]))))
-  print
+  print()
 
   if auth.has_countersignature:
     print('Countersig chain head issued by:')
@@ -138,7 +138,7 @@ def main():
           (time.asctime(time.gmtime(auth.counter_chain_head[0]))))
     print('  Countersig not after: %s UTC' %
           (time.asctime(time.gmtime(auth.counter_chain_head[1]))))
-    print
+    print()
 
   print('Certificates')
   for (issuer, serial), cert in auth.certificates.items():
@@ -158,7 +158,7 @@ def main():
     bin_cert = der_encoder.encode(cert)
     print('  MD5: %s' % hashlib.md5(bin_cert).hexdigest())
     print('  SHA1: %s' % hashlib.sha1(bin_cert).hexdigest())
-    print
+    print()
 
   if auth.trailing_data:
     print('Signature Blob had trailing (unvalidated) data (%d bytes): %s' %

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2012 Google Inc. All Rights Reserved.
 #
@@ -35,7 +35,7 @@ class TimeTest(test.TestCase):
     t = Time()
     t.setComponentByName('utcTime', utctime)
     t_str = time.asctime(time.gmtime(t.ToPythonEpochTime()))
-    self.assertEquals(t_str, 'Thu Jun 14 23:59:59 2012')
+    self.assertEqual(t_str, 'Thu Jun 14 23:59:59 2012')
 
 
 def main():
@@ -43,4 +43,3 @@ def main():
 
 if __name__ == '__main__':
   main()
-

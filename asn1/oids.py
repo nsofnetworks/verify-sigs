@@ -25,7 +25,6 @@ import pkcs7
 import spc
 
 # I want the formatting to make sense and be readable, really.
-# pylint: disable-msg=C6006,C6007
 OID_TO_CLASS = {
     (1,2,840,113549,1,7,1)   : 'PKCS#7 Data',
     (1,2,840,113549,1,7,2)   : pkcs7.SignedData,

@@ -32,7 +32,6 @@ class DistinguishedName(object):
   """Container for relevant OIDs and static conversion methods."""
 
   # I want the formatting to make sense and be readable, really.
-  # pylint: disable-msg=C6007
   OIDs = {
       (2, 5, 4, 3)                       : 'CN',   # common name
       (2, 5, 4, 6)                       : 'C',    # country
@@ -43,7 +42,6 @@ class DistinguishedName(object):
       (0, 9, 2342, 19200300, 100, 1, 25) : 'DC',   # domainComponent
       (1, 2, 840, 113549, 1, 9, 1)       : 'EMAIL',# emailaddress
   }
-  # pylint: enable-msg=C6007
 
   @staticmethod
   def OidToName(oid):

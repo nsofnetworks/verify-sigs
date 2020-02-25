@@ -47,7 +47,7 @@ class FingerprinterTest(test.TestCase):
             diff = (exp_results != results)
             if diff:
               print
-              print fingerprint.FormatResults(resf, exp_results)
+              print fingerprint.FormatResults(resf, exp_results) # NADAV: exp has sha.512
               print fingerprint.FormatResults(objf, results)
               self.fail()
 
@@ -91,7 +91,7 @@ class FingerprinterTest(test.TestCase):
     def __init__(self):
       self.seen = ""
 
-    def update(self, content):  # pylint: disable-msg=C6409
+    def update(self, content):
       self.seen += content
 
   def testHashBlock(self):

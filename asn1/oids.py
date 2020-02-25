@@ -21,8 +21,8 @@
 import hashlib
 
 
-import pkcs7
-import spc
+from asn1 import pkcs7
+from asn1 import spc
 
 # I want the formatting to make sense and be readable, really.
 OID_TO_CLASS = {

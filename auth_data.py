@@ -34,9 +34,9 @@ from pyasn1.codec.der import encoder as der_encoder
 from pyasn1.type import univ
 
 try:
-  from M2Crypto import Err as M2_Err    # pylint: disable-msg=C6204
-  from M2Crypto import RSA as M2_RSA    # pylint: disable-msg=C6204
-  from M2Crypto import X509 as M2_X509  # pylint: disable-msg=C6204
+  from M2Crypto import Err as M2_Err
+  from M2Crypto import RSA as M2_RSA
+  from M2Crypto import X509 as M2_X509
 except ImportError:
   M2_X509 = None
 

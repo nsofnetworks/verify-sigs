@@ -20,13 +20,12 @@
 
 # Comments and constant names as extracted from pecoff_v8 specs.
 # Variable names are also used as defined in the PECOFF specification.
-# pylint: disable-msg=C6409
 
 # Version 1, legacy version of Win_Certificate structure. It is supported
 # only for purposes of verifying legacy Authenticode signatures.
 WIN_CERT_REVISION_1_0 = 0x100
 
-# Version 2 is the current version of the Win_Certificate structure. 
+# Version 2 is the current version of the Win_Certificate structure.
 WIN_CERT_REVISION_2_0 = 0x200
 
 # Only type PKCS is supported by the pecoff specification.

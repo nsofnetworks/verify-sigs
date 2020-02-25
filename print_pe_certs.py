@@ -22,7 +22,6 @@
 """
 
 # I really want to use parens in print statements.
-# pylint: disable-msg=C6003
 
 import hashlib
 import pprint
@@ -44,7 +43,7 @@ def F(self, idx):
   if type(idx) is int:
     return self.getComponentByPosition(idx)
   else: return self.getComponentByName(idx)
-from pyasn1.type import univ  # pylint: disable-msg=C6204,C6203
+from pyasn1.type import univ
 univ.SequenceAndSetBase.__getitem__ = F
 del F, univ
 # EVIL EVIL

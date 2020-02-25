@@ -33,11 +33,9 @@ import struct
 import sys
 
 
-# pylint: disable-msg=C6409
 # Two classes given named tupes for ranges and relative ranges.
 Range = collections.namedtuple('Range', 'start end')
 RelRange = collections.namedtuple('RelRange', 'start len')
-# pylint: enable-msg=C6409
 
 
 class Finger(object):
@@ -122,9 +120,8 @@ class Fingerprinter(object):
   """
 
   BLOCK_SIZE = 1000000
-  GENERIC_HASH_CLASSES = (hashlib.md5, hashlib.sha1, hashlib.sha256,
-                          hashlib.sha512)
-  AUTHENTICODE_HASH_CLASSES = (hashlib.md5, hashlib.sha1, hashlib.sha256)
+  GENERIC_HASH_CLASSES = (hashlib.md5, hashlib.sha1, hashlib.sha256, hashlib.sha512)
+  AUTHENTICODE_HASH_CLASSES = (hashlib.md5, hashlib.sha1, hashlib.sha256)  # NADAV
 
   def __init__(self, file_obj):
     self.fingers = []

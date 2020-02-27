@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2010 Google Inc. All Rights Reserved.
 #
@@ -31,7 +31,6 @@ import hashlib
 import os
 import struct
 import sys
-
 
 # Two classes given named tupes for ranges and relative ranges.
 Range = collections.namedtuple('Range', 'start end')
@@ -276,7 +275,7 @@ class Fingerprinter(object):
     extents = {}
     self.file.seek(0, os.SEEK_SET)
     buf = self.file.read(2)
-    if buf != 'MZ':
+    if buf != b'MZ':
       return None
     self.file.seek(0x3C, os.SEEK_SET)
     buf = self.file.read(4)
@@ -285,7 +284,7 @@ class Fingerprinter(object):
       return None
     self.file.seek(pecoff_sig_offset, os.SEEK_SET)
     buf = self.file.read(4)
-    if buf != 'PE\0\0':
+    if buf != b'PE\x00\x00':
       return None
     self.file.seek(pecoff_sig_offset + 20, os.SEEK_SET)
     buf = self.file.read(2)
@@ -334,7 +333,8 @@ class Fingerprinter(object):
     extents['SignedData'] = RelRange(start, length)
     return extents
 
-  def _CollectSignedData(self, (start, length)):
+  def _CollectSignedData(self, signed_data):
+    (start, length) = signed_data
     """Extracts signedData blob from PECOFF binary and parses first layer."""
     self.file.seek(start, os.SEEK_SET)
     buf = self.file.read(length)
@@ -378,7 +378,6 @@ class Fingerprinter(object):
       extents = None
     if extents is None:
       return False
-
     signed_data = None
     ranges = []
     start = 0
@@ -438,9 +437,9 @@ def FormatResults(file_obj, results):
             out += ('(rev=%d, type=%d, cert len=%d bytes)' %
                     (v[0], v[1], len(v[2])))
           else:
-            out += v.encode('hex') + ','
+            out += v.hex() + ','
       else:
-        out += value.encode('hex')
+        out += value.hex()
       out += '\n'
   return out
 
@@ -451,24 +450,24 @@ def FindPehash(results):
     if r['name'] == 'pecoff':
       res = r
   if 'SignedData' not in res:
-    print 'PE File, but no signature data present.'
+    print('PE File, but no signature data present.')
     return
   for hashes in ('md5', 'sha1', 'sha256', 'sha512'):
     if res['SignedData'][0][2].find(res[hashes]) != -1:
-      print 'Found matching %s hash in SignedData.' % hashes
+      print('Found matching %s hash in SignedData.' % hashes)
       return
-  print 'PE File with signature data, NO hash matches.'
+  print('PE File with signature data, NO hash matches.')
 
 
 def main(filenames):
   for filename in filenames:
-    print 'Scanning %s' % filename
+    print('Scanning %s' % filename)
     with open(filename, 'rb') as file_obj:
       fingerprinter = Fingerprinter(file_obj)
       is_pecoff = fingerprinter.EvalPecoff()
       fingerprinter.EvalGeneric()
       results = fingerprinter.HashIt()
-      print FormatResults(file_obj, results)
+      print(FormatResults(file_obj, results))
       if is_pecoff:
         FindPehash(results)
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright 2011 Google Inc. All Rights Reserved.
 #
@@ -258,7 +258,7 @@ class AuthData(object):
         # 1.3.6.1.4.1.311.2.1.11 contains as value 1.3.6.1.4.1.311.2.1.21
         # SPC_STATEMENT_TYPE_OBJID    SPC_INDIVIDUAL_SP_KEY_PURPOSE_OBJID
         results[oids.OID_TO_CLASS.get(attr['type'])] = attr['values']
-    if None in results.itervalues():
+    if None in results.values():
       raise Asn1Error('Missing mandatory field(s) in auth_attrs.')
 
     # making sure that the auth_attrs were processed in correct order

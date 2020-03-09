@@ -25,7 +25,7 @@ from pyasn1.type import useful
 
 import unittest as test
 
-from x509_time import Time
+from verify_sigs.asn1.x509_time import Time
 
 
 class TimeTest(test.TestCase):

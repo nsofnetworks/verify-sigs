@@ -20,9 +20,8 @@
 
 import hashlib
 
-
-import pkcs7
-import spc
+from verify_sigs.asn1 import pkcs7
+from verify_sigs.asn1 import spc
 
 # I want the formatting to make sense and be readable, really.
 OID_TO_CLASS = {
